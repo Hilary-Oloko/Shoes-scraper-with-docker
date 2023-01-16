@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mon application de Scraping</title>
+
+        <head>
+            <style>
+              form {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 50%;
+                margin: 0 auto;
+                padding: 20px;
+              }
+        
+              input {
+                width: 300px;
+                margin: 20px 20px;
+                height: 50px;
+                border: none;
+                border-radius: 10px;
+                font-family: Shanti;
+                font-size: 1.3em;
+                text-align: center;
+                }
+        
+              button[type="submit"] {
+                width: 10%;
+                height: 55px;
+                background-color: PaleVioletRed;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                border-radius: 4px;
+                border-radius: 10px;
+                cursor: pointer;
+              }
+
+        
+              button[type="submit"]:hover {
+                background-color:  MediumVioletRed;
+              }
+        
+              table {
+                width: 100%;
+                border-collapse: collapse;
+              }
+        
+              th, td {
+                text-align: center;
+                padding: 8px;
+              }
+        
+              tr:nth-child(even) {
+                background-color: #f2f2f2;
+              }
+        
+              th {
+                background-color: PaleVioletRed;
+                color: white;
+              }
+
+              h1,h2 {
+                  color: white;
+                  font-family: Shanti;
+                  font-size: 2em;
+                  display: inline-block;
+                  margin:  20px;
+              }
+
+              p{
+                font-size: 18px;
+                font-weight: bold;
+              }
+              
+              a {
+                  color: black;
+                  text-decoration: none;
+              }
+
+              a:hover {
+                  color: blue;
+                  text-decoration: underline;
+              }
+
+
+              body {
+                    text-align: center;
+                    background-color: SlateGrey;
+              }
+            </style>
+
+    </head>
+    <body>
+        <h1>Rechercher les Articles</h1>
+
+        <form method="POST" action="/">
+            <input type="text" name="search_term" placeholder="Rechercher...">
+            <button type="submit">Go</button>
+        </form>
+
+        {% if documents1 %}
+
+          <h2>Résultats de la recherche</h2>
+          <table>
+            <thead>
+              <tr>
+                  <th>Nom</th>
+                  <th>Prix</th>
+                  <th>lien vers la page</th>
+                  <th>Site</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for document in documents1 %}
+                  <tr>
+                      <td>{{ document.nom }}</td>
+                      <td>{{ document.prix }}</td>
+                      <td>{{ document.site }}</td>
+                      <td><a href="{{ document.lien }}"> Achetez</a></td>
+                  </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+    </body>
+</html>

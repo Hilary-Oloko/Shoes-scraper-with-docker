@@ -1,0 +1,69 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - ./data:/data/db
+    container_name: db
+    hostname: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - rezo
+
+  mongo_express:
+    image: mongo-express
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - "8080:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=db
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+    networks:
+      - rezo
+
+
+  scraper:
+    build: 
+      context: ./Scrapy
+    restart: always
+    ports:
+      - "80:3000"
+    depends_on:
+      - mongo
+    volumes:
+      - ./Scrapy/scrapy-data:/scrapy
+    command: scrapy runspider chaussure.py
+    container_name: back 
+    networks:
+    - rezo
+
+
+  app:
+    build: 
+      context: ./web
+    depends_on:
+      - mongo
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./web:/app
+    container_name: front  
+    links:
+      - mongo
+    networks:
+    - rezo
+
+
+networks:
+  rezo:
+    driver: bridge  
